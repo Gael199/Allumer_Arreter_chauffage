@@ -20,9 +20,9 @@ import streamlit as st
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
-# =============================================================================
+
 # CONFIGURATION GÉNÉRALE
-# =============================================================================
+
 st.set_page_config(
     page_title="Décision Chauffage — Analyse DJU",
     page_icon="🌡️",
@@ -38,9 +38,9 @@ COL_DJU = "DJU Chauds"
 REQUIRED_COLS = [COL_SITE, COL_EQUIP, COL_DATE, COL_CONSO, COL_DJU]
 
 
-# =============================================================================
+
 # FONCTIONS DE CHARGEMENT ET DE NETTOYAGE
-# =============================================================================
+
 @st.cache_data(show_spinner=False)
 def load_data(file_bytes: bytes) -> pd.DataFrame:
     """Charge et nettoie le fichier Excel de consommation."""
@@ -68,9 +68,9 @@ def load_data(file_bytes: bytes) -> pd.DataFrame:
     return df
 
 
-# =============================================================================
+
 # MODÈLE DE RUPTURE (CHANGEPOINT) — cœur de la décision chauffage
-# =============================================================================
+
 def fit_changepoint_model(dju: np.ndarray, conso: np.ndarray, n_candidates: int = 80) -> dict:
     """
     Ajuste un modèle de régression linéaire par morceaux (continu, à un seul
@@ -130,9 +130,9 @@ def recommandation(dju_value: float, model: dict, marge: float = 1.0) -> str:
         return "🤔 Zone limite — à surveiller"
 
 
-# =============================================================================
+
 # GÉOCODAGE ET PRÉVISIONS MÉTÉO (Open-Meteo — gratuit, sans clé API)
-# =============================================================================
+
 @st.cache_data(show_spinner=False, ttl=3600)
 def geocode_ville(nom_ville: str):
     try:
@@ -192,9 +192,9 @@ def dju_depuis_temperature(temp_moy: np.ndarray, base_ref: float = 18.0) -> np.n
     return np.maximum(0, base_ref - np.asarray(temp_moy, dtype=float))
 
 
-# =============================================================================
+
 # SIDEBAR — CHARGEMENT DES DONNÉES
-# =============================================================================
+
 st.sidebar.title("🌡️ Décision Chauffage")
 st.sidebar.caption(
     "Analyse du point de bascule chauffage à partir de l'historique "
@@ -245,16 +245,16 @@ except ValueError as e:
 
 sites = sorted(df[COL_SITE].unique())
 
-# =============================================================================
+
 # ONGLET STRUCTURE
-# =============================================================================
+
 tab_analyse, tab_comparatif, tab_meteo, tab_segmentation = st.tabs(
     ["📈 Analyse par site", "📊 Tableau comparatif", "🌦️ Décision météo", "🧩 Segmentation"]
 )
 
-# -----------------------------------------------------------------------
+
 # ONGLET 1 : ANALYSE PAR SITE
-# -----------------------------------------------------------------------
+
 with tab_analyse:
     col1, col2 = st.columns(2)
     with col1:
@@ -350,9 +350,9 @@ with tab_analyse:
         )
         st.plotly_chart(fig2, width="stretch")
 
-# -----------------------------------------------------------------------
+
 # ONGLET 2 : TABLEAU COMPARATIF DE TOUS LES SITES
-# -----------------------------------------------------------------------
+
 with tab_comparatif:
     st.subheader("Seuils de bascule chauffage — tous sites / équipements")
 
@@ -397,9 +397,9 @@ with tab_comparatif:
     fig3.update_layout(height=max(400, 25 * len(tableau)))
     st.plotly_chart(fig3, width="stretch")
 
-# -----------------------------------------------------------------------
+
 # ONGLET 3 : DÉCISION À PARTIR DE LA MÉTÉO RÉELLE
-# -----------------------------------------------------------------------
+
 with tab_meteo:
     st.subheader("Décision chauffage à partir des prévisions météo (Open-Meteo)")
     st.caption(
@@ -465,9 +465,9 @@ with tab_meteo:
     else:
         st.info("Renseignez une ville pour obtenir une recommandation basée sur la météo réelle.")
 
-# -----------------------------------------------------------------------
+
 # ONGLET 4 : SEGMENTATION KMEANS (cohérence avec le notebook du projet)
-# -----------------------------------------------------------------------
+
 with tab_segmentation:
     st.subheader("Segmentation des profils de consommation (KMeans)")
     st.caption(
@@ -500,7 +500,7 @@ with tab_segmentation:
 
     fig5 = px.scatter(
         profils, x="dju_moyen", y="conso_moyenne", color="cluster",
-        size="coeff_variation", hover_data=[COL_SITE, COL_EQUIP],
+        size=900, hover_data=[COL_SITE, COL_EQUIP],
         title="Segmentation des sites par profil de consommation",
         labels={"dju_moyen": "DJU moyen", "conso_moyenne": "Consommation moyenne (kWhef)"},
     )
