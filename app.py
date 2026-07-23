@@ -500,7 +500,7 @@ with tab_segmentation:
 
     fig5 = px.scatter(
         profils, x="dju_moyen", y="conso_moyenne", color="cluster",
-        size=900, hover_data=[COL_SITE, COL_EQUIP],
+        size="coeff_variation", hover_data=[COL_SITE, COL_EQUIP],
         title="Segmentation des sites par profil de consommation",
         labels={"dju_moyen": "DJU moyen", "conso_moyenne": "Consommation moyenne (kWhef)"},
     )
