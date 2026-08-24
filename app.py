@@ -416,7 +416,7 @@ with tab_meteo:
 
     ville = st.text_input(
         "Ville ou localisation du site (pour récupérer la météo)",
-        placeholder="ex : Lyon, Grenoble, Marseille…",
+        placeholder="ex : Bayonne, Biarritz, Hasparren…",
     )
     base_ref_meteo = st.slider(
         "Référence DJU (°C) utilisée pour convertir la température en DJU",
