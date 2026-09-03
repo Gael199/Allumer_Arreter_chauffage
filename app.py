@@ -25,7 +25,7 @@ from sklearn.preprocessing import StandardScaler
 
 st.set_page_config(
     page_title="Décision Chauffage — Analyse DJU",
-    page_icon="🌡️",
+    page_icon="",
     layout="wide",
 )
 
@@ -123,11 +123,11 @@ def predict_conso(model: dict, dju_values: np.ndarray) -> np.ndarray:
 def recommandation(dju_value: float, model: dict, marge: float = 1.0) -> str:
     seuil = model["threshold"]
     if dju_value >= seuil + marge:
-        return "🔥 Chauffage recommandé"
+        return "Chauffage recommandé"
     elif dju_value <= seuil - marge:
-        return "☀️ Chauffage non nécessaire"
+        return "Chauffage non nécessaire"
     else:
-        return "🤔 Zone limite — à surveiller"
+        return "Zone limite — à surveiller"
 
 
 
@@ -195,7 +195,7 @@ def dju_depuis_temperature(temp_moy: np.ndarray, base_ref: float = 18.0) -> np.n
 
 # SIDEBAR — CHARGEMENT DES DONNÉES
 
-st.sidebar.title("🌡️ Décision Chauffage")
+st.sidebar.title("Décision Chauffage")
 st.sidebar.caption(
     "Analyse du point de bascule chauffage à partir de l'historique "
     "Consommation / DJU Chauds."
@@ -206,9 +206,9 @@ uploaded_file = st.sidebar.file_uploader(
 )
 
 if uploaded_file is None:
-    st.title("🌡️ Outil de décision : quand allumer / arrêter le chauffage ?")
+    st.title("Outil de décision : quand allumer / arrêter le chauffage ?")
     st.info(
-        "👈 Chargez votre fichier `donnees_regroupees.xlsx` dans la barre latérale "
+        "Chargez votre fichier `donnees_regroupees.xlsx` dans la barre latérale "
         "pour commencer.\n\n"
         f"Colonnes attendues : `{'`, `'.join(REQUIRED_COLS)}`."
     )
@@ -249,7 +249,7 @@ sites = sorted(df[COL_SITE].unique())
 # ONGLET STRUCTURE
 
 tab_analyse, tab_comparatif, tab_meteo, tab_segmentation = st.tabs(
-    ["📈 Analyse par site", "📊 Tableau comparatif", "🌦️ Décision météo", "🧩 Segmentation"]
+    ["Analyse par site", "Tableau comparatif", "Décision météo", "Segmentation"]
 )
 
 
@@ -287,7 +287,7 @@ with tab_analyse:
     k4.metric("Qualité du modèle (R²)", f"{model['r2']:.2f}")
 
     st.caption(
-        "💡 La température de bascule est une estimation indicative, obtenue en "
+        "La température de bascule est une estimation indicative, obtenue en "
         "supposant que les DJU du fichier ont été calculés avec la température de "
         "référence choisie ci-dessus. Le seuil DJU lui-même reste la valeur la "
         "plus fiable, car directement estimée sur les données."
@@ -384,7 +384,7 @@ with tab_comparatif:
 
     csv = tableau.to_csv(index=False).encode("utf-8")
     st.download_button(
-        "📥 Télécharger le tableau (CSV)", csv,
+        "Télécharger le tableau (CSV)", csv,
         "seuils_chauffage_par_site.csv", "text/csv",
     )
 
